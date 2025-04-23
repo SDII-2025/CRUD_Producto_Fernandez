@@ -1,5 +1,6 @@
 package com.example.crud_cosmodb.services;
 
+import com.example.crud_cosmodb.messaging.AzureServiceBusSender;
 import com.example.crud_cosmodb.entities.Producto;
 import com.example.crud_cosmodb.repositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ public class ProductoService {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private AzureServiceBusSender serviceBusSender;
 
     public List<Producto> getProductos() {
         return productoRepository.findAll();
@@ -28,7 +32,16 @@ public class ProductoService {
         if (existe) {
             throw new IllegalArgumentException("Ya existe un producto con ese codigo de barras");
         }
-        return productoRepository.save(producto);
+
+        Producto productoGuardado = productoRepository.save(producto);
+
+        String mensaje = String.format("Producto creado: %s - %s - %d",
+                productoGuardado.getCodigoBarras(),
+                productoGuardado.getNombre(),
+                productoGuardado.getPrecio());
+        serviceBusSender.enviarMensaje(mensaje);
+
+        return productoGuardado;
     }
 
     public boolean eliminarProducto(String codigoBarras) {
@@ -38,19 +51,5 @@ public class ProductoService {
         } else {
             return false;
         }
-    }
-
-    public Producto actualizarProducto(String codigoBarras, Producto producto) {
-        Producto productoExistente = productoRepository.findByCodigoBarras(codigoBarras)
-                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
-
-        if (!productoExistente.getCodigoBarras().equals(producto.getCodigoBarras())) {
-            productoExistente.setCodigoBarras(producto.getCodigoBarras());
-        }
-
-        productoExistente.setNombre(producto.getNombre());
-        productoExistente.setPrecio(producto.getPrecio());
-
-        return productoRepository.save(productoExistente);
     }
 }
