@@ -83,7 +83,7 @@ public class ProductoController {
                 }
             }
             productoService.eliminarProducto(codigoBarras);
-            Producto nuevoProducto = new Producto(producto.getCodigoBarras(), producto.getNombre(), producto.getPrecio());
+            Producto nuevoProducto = new Producto(producto.getCodigoBarras(), producto.getNombre(), producto.getCategoria(), producto.getPrecio());
             Producto productoCreado = productoService.crearProducto(nuevoProducto);
             return ResponseEntity.ok(productoCreado);
         } else {

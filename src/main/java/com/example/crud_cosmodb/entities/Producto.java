@@ -10,14 +10,16 @@ public class Producto {
     private String codigoBarras;
 
     private String nombre;
+    private String categoria;
     private int precio;
 
     public Producto() {
     }
 
-    public Producto(String codigoBarras, String nombre, int precio) {
+    public Producto(String codigoBarras, String nombre, String categoria, int precio) {
         this.codigoBarras = codigoBarras;
         this.nombre = nombre;
+        this.categoria = categoria;
         this.precio = precio;
     }
 
@@ -27,6 +29,10 @@ public class Producto {
 
     public String getCodigoBarras() {
         return codigoBarras;
+    }
+
+    public String getCategoria() {
+        return categoria;
     }
 
     public int getPrecio() {
@@ -43,5 +49,9 @@ public class Producto {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

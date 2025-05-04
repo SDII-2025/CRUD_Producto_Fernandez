@@ -11,13 +11,10 @@ import java.util.Optional;
 import java.util.Scanner;
 
 @SpringBootApplication
-public class CrudCosmodbApplication {
-
-	@Autowired
-	private ProductoRepository productoRepository;
+public class ApiProductos {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CrudCosmodbApplication.class, args);
+		SpringApplication.run(ApiProductos.class, args);
 	}
 
 }
